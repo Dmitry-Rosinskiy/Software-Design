@@ -1,4 +1,4 @@
-# Home work 1.2
+# Home work #1.2
 Create a method that prints imputed amount (N)
 Fibonacci numbers.
 
