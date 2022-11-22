@@ -1,15 +1,26 @@
 package org.example;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
-    static private final ArrayList<Student> students = new ArrayList<>();
+    static private final String FILE_NAME = "students.txt";
+    static private ArrayList<Student> students;
     static private final Teacher teacher = new Teacher();
 
     public static void main(String[] args) {
         System.out.println("Student picker app");
-        makeStudents();
+
+        var  fileManager = new FileManager(FILE_NAME);
+        try {
+            students = fileManager.readStudents();
+        }
+        catch (IOException ex) {
+            System.out.println("Could not open file with students: " + ex.getMessage());
+            return;
+        }
+
         System.out.println("\nType /h for help");
         Scanner in = new Scanner(System.in);
         String command = "";
@@ -32,28 +43,23 @@ public class Main {
                     break;
             }
         }
+        try {
+            fileManager.writeStudents(students);
+        }
+        catch (IOException ex) {
+            System.out.println("Could not write students to file: " + ex.getMessage());
+            return;
+        }
         System.out.println("See you next time!");
-    }
-
-    private static void makeStudents() {
-        students.add(new Student("Steve"));
-        students.add(new Student("George"));
-        students.add(new Student("Tim"));
-        students.add(new Student("Jack"));
-        students.add(new Student("Tom"));
-        students.add(new Student("Cody"));
-        students.add(new Student("Zack"));
-        students.add(new Student("Jake"));
-        students.add(new Student("Linda"));
-        students.add(new Student("Fred"));
     }
 
     private static void showStudentsWithGradeList() {
         boolean foundStudent = false;
+        ArrayList<String> gradedStudents = teacher.getGradedStudents();
         for (Student student : students) {
-            if (student.getGrade().isPresent()) {
+            if (gradedStudents.contains(student.getName())) {
                 foundStudent = true;
-                System.out.println(student);
+                System.out.println(student.getName() + ": " + student.getLastGrade());
             }
         }
         if (!foundStudent) {
@@ -64,10 +70,14 @@ public class Main {
     private static void showHelp() {
         System.out.println("This app picks for you a random student, asks if he/she is presented and if so grades chosen student.");
         System.out.println("Lesson starts when app starts and lesson finishes when app finishes.");
-        System.out.println("Commands:");
+        System.out.println("All students are written in file \"students.txt\" in such format:");
+        System.out.println("<name> <grade1> <grade2> ... <grade_n> 0 (\"0\" only tells when grade sequence ends and is not included in it).");
+        System.out.println("After app finishes new grades of students are added in the same file (\"students.txt\").");
+        System.out.println("\nCommands:");
         System.out.println("\t/r – selects random student, asks if present");
-        System.out.println("\t/l – list of students who received a grade");
+        System.out.println("\t/l – list of students who received a grade during the lesson");
         System.out.println("\t/h – help, lists commands and how to use them");
         System.out.println("\t/e - exit app");
+        System.out.println();
     }
 }
