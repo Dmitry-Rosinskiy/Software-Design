@@ -1,6 +1,6 @@
 package org.example;
 
-import java.util.Optional;
+import java.util.ArrayList;
 import java.util.Random;
 
 public final class Student {
@@ -8,7 +8,7 @@ public final class Student {
     private static final Random randomPresenceGenerator;
 
     private final String name;
-    private Optional<Integer> grade = Optional.empty();
+    private final ArrayList<Integer> grades;
     private final boolean isPresent;
 
 
@@ -20,27 +20,38 @@ public final class Student {
         return isPresent;
     }
 
-    public Optional<Integer> getGrade() {
-        return grade;
-    }
-
-    public void setGrade(int grade) {
-        this.grade = Optional.of(grade);
-    }
-
 
     static {
         presentSeed = System.currentTimeMillis();
         randomPresenceGenerator = new Random(presentSeed);
     }
 
-    Student(String name) {
+    Student(String name, ArrayList<Integer> grades) {
         this.name = name;
+        this.grades = grades;
         isPresent = randomPresenceGenerator.nextBoolean();
+    }
+
+    public void addGrade(int grade) {
+        if (grade >= 1 && grade <= 10) {
+            grades.add(grade);
+        }
+    }
+
+    public int getLastGrade() {
+        if (grades.size() > 0) {
+            return grades.get(grades.size() - 1);
+        } else {
+            return 0;
+        }
     }
 
     @Override
     public String toString() {
-        return name + (grade.isPresent() ? ": " + grade.get() : "");
+         var str = new StringBuilder(name);
+         for (int grade : grades) {
+             str.append(" ").append(grade);
+         }
+         return str.toString();
     }
 }

@@ -10,6 +10,12 @@ public class Teacher {
     private static final Random randomGradeGenerator;
 
     private final ArrayList<String> flaggedStudents = new ArrayList<>();
+    private final ArrayList<String> gradedStudents = new ArrayList<>();
+
+
+    public ArrayList<String> getGradedStudents() {
+        return gradedStudents;
+    }
 
     static {
         selectSeed = System.currentTimeMillis();
@@ -40,7 +46,8 @@ public class Teacher {
             int grade = randomGradeGenerator.nextInt(1, 10);
             System.out.println("Grade: " + grade);
             int studentIndex = getStudentIndex(student.getName(), students);
-            students.get(studentIndex).setGrade(grade);
+            students.get(studentIndex).addGrade(grade);
+            gradedStudents.add(student.getName());
         } else {
             System.out.println(student.getName() + " is not present");
         }
