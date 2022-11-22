@@ -1,0 +1,10 @@
+Steve 8 1 0
+George 0
+Tim 6 9 0
+Jack 4 5 0
+Tom 5 5 0
+Cody 1 7 8 0
+Zack 9 6 0
+Jake 0
+Linda 1 0
+Fred 8 4 0
