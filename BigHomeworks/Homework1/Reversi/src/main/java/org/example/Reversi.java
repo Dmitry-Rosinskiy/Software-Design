@@ -2,25 +2,63 @@ package org.example;
 
 import java.util.Scanner;
 
+/**
+ * Класс игры в реверси.
+ */
 public final class Reversi implements Executable {
-
+    /**
+     * Меню.
+     */
     private final Menu MENU = new Menu();
+    /**
+     * Таблица лучших результатов игроков.
+     */
     private final LeaderBoard LEADER_BOARD = new LeaderBoard();
+    /**
+     * Игрок.
+     */
     private final Gamer PLAYER = new Player("Игрок", Color.BLACK);
+    /**
+     * Компьютер.
+     */
     private final Gamer COMPUTER = new Computer("Компьютер", Color.WHITE);
+    /**
+     * Игрок 1.
+     */
     private final Gamer PLAYER1 = new Player("Игрок 1", Color.BLACK);
+    /**
+     * Игрок 2.
+     */
     private final Gamer PLAYER2 = new Player("Игрок 2", Color.WHITE);
 
+    /**
+     * Команда запуска режима "Игрок против компьютера".
+     */
     private final String PVC_COMMAND = "pvc";
+    /**
+     * Команда запуска режима "Игрок против игрока".
+     */
     private final String PVP_COMMAND = "pvp";
+    /**
+     * Команда вывода правил.
+     */
     private final String HELP_COMMAND = "help";
+    /**
+     * Команда выхода из игры.
+     */
     private final String EXIT_COMMAND = "exit";
 
-    Reversi() {
+    /**
+     * Конструктор игры.
+     */
+    public Reversi() {
         setupMenu();
         setupLeaderBoard();
     }
 
+    /**
+     * Запускает игру.
+     */
     public void start() {
         showMainMenu();
         System.out.println();
@@ -49,16 +87,25 @@ public final class Reversi implements Executable {
         finish();
     }
 
+    /**
+     * Выходит из игры.
+     */
     private void finish() {
         System.out.println("До скорой встречи!");
     }
 
+    /**
+     * Выводит главное меню.
+     */
     private void showMainMenu() {
         MENU.show();
         System.out.println();
         LEADER_BOARD.show();
     }
 
+    /**
+     * Выводит правила.
+     */
     private void showHelp() {
         System.out.println("В игре используется квадратная доска размером 8 × 8 клеток (все клетки могут быть одного цвета) и 64 специальные фишки, окрашенные с разных сторон в контрастные цвета, например, в белый и чёрный. Клетки доски нумеруются от верхнего левого угла: вертикали — латинскими буквами, горизонтали — цифрами (по сути дела, можно использовать шахматную доску). Один из игроков играет белыми, другой — чёрными. Делая ход, игрок ставит фишку на клетку доски «своим» цветом вверх.\n" +
                 "\n" +
@@ -72,6 +119,9 @@ public final class Reversi implements Executable {
         System.out.println();
     }
 
+    /**
+     * Подготавливает меню.
+     */
     private void setupMenu() {
         MENU.setLength(30);
         MENU.setTitle("Reversi");
@@ -81,6 +131,9 @@ public final class Reversi implements Executable {
         MENU.addMenuItem("Выйти", "(" + EXIT_COMMAND + ")");
     }
 
+    /**
+     * Подготавливает таблицу лучших результатов игроков.
+     */
     private void setupLeaderBoard() {
         LEADER_BOARD.setTitle("Лучшие результаты игроков:");
         LEADER_BOARD.setNameLength(20);
@@ -91,6 +144,9 @@ public final class Reversi implements Executable {
         LEADER_BOARD.addLeaderBoardItem(PLAYER2.NAME, PLAYER2.getHighScore());
     }
 
+    /**
+     * Обновляет таблицу лучших результатов игроков.
+     */
     private void updateLeaderBoard() {
         LEADER_BOARD.getLeaderBoardItem(0).setScore(PLAYER.getHighScore());
         LEADER_BOARD.getLeaderBoardItem(1).setScore(COMPUTER.getHighScore());
@@ -98,6 +154,10 @@ public final class Reversi implements Executable {
         LEADER_BOARD.getLeaderBoardItem(3).setScore(PLAYER2.getHighScore());
     }
 
+    /**
+     * Запускает новую партию игры.
+     * @param id идентификатор игры.
+     */
     private void newGame(String id) {
         ReversiRound round;
         if (PVC_COMMAND.equals(id)) {
