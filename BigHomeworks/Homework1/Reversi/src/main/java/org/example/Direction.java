@@ -1,5 +1,8 @@
 package org.example;
 
+/**
+ * Перечисление направлений.
+ */
 public enum Direction {
     Left,
     Right,
