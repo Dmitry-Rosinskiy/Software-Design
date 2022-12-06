@@ -3,7 +3,7 @@ package org.example;
 import java.util.ArrayList;
 
 /**
- * Клаас элемента меню.
+ * Класс элемента меню.
  */
 public final class Menu {
 
