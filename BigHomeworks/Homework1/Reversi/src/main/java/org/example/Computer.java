@@ -2,17 +2,37 @@ package org.example;
 
 import java.util.ArrayList;
 
-public class Computer extends Gamer {
+/**
+ * Класс компьютера.
+ */
+public final class Computer extends Gamer {
+    /**
+     * Игровая доска.
+     */
     private Board board = null;
 
+    /**
+     * Конструктор компьютера по имени и цвету.
+     * @param name имя компьютера
+     * @param color игровой цвет
+     */
     public Computer(String name, Color color) {
         super(name, color, true);
     }
 
+    /**
+     * Добавляет игровую доску.
+     * @param board игровая доска
+     */
     public void addBoard(Board board) {
         this.board = board;
     }
 
+    /**
+     * Делает ход.
+     * @param moves список возможных ходов
+     * @return выбранный ход
+     */
     @Override
     public String makeMove(ArrayList<String> moves) {
         // System.out.println(NAME + " думает...");
@@ -31,6 +51,12 @@ public class Computer extends Gamer {
         return bestMove;
     }
 
+    /**
+     * Оценочная функция по позиции на игровой доске.
+     * @param row индекс строки доски
+     * @param col индекс столбца доски
+     * @return значение оценочной функции
+     */
     private double estimator(int row, int col) {
         double result = 0;
         double ssCorner = 0.8;
@@ -51,6 +77,13 @@ public class Computer extends Gamer {
         return result;
     }
 
+    /**
+     * Оценочная функция по позиции на игровой доске и направлению.
+     * @param row индекс строки
+     * @param col индекс столбца
+     * @param direction направление
+     * @return значение оценочной функции
+     */
     private int estimatorDirection(int row, int col, Direction direction) {
         int result = 0;
         int sEdge = 2;
@@ -86,6 +119,12 @@ public class Computer extends Gamer {
         return result;
     }
 
+    /**
+     * Изменяет индекс строки согласно направлению.
+     * @param row индекс строки
+     * @param direction направление
+     * @return новый индекс строки
+     */
     private int advanceRowDirection(int row, Direction direction) {
         return switch (direction) {
             case UpLeft, Up, UpRight -> row - 1;
@@ -94,6 +133,12 @@ public class Computer extends Gamer {
         };
     }
 
+    /**
+     * Изменяет индекс столбца согласно направлению.
+     * @param col индекс столбца
+     * @param direction направление
+     * @return новый индекс столбца
+     */
     private int advanceColDirection(int col, Direction direction) {
         return switch (direction) {
             case UpLeft, Left, DownLeft -> col - 1;
