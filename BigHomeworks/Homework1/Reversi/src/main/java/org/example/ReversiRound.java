@@ -2,12 +2,32 @@ package org.example;
 
 import java.util.ArrayList;
 
+/**
+ * Класс партии игры в реверси.
+ */
 public final class ReversiRound implements Executable {
+    /**
+     * Игрок 1.
+     */
     private final Gamer PLAYER1;
+    /**
+     * Игрок 2.
+     */
     private final Gamer PLAYER2;
+    /**
+     * Текущий игрок.
+     */
     private Gamer currentPlayer;
+    /**
+     * Игровая доска.
+     */
     private final Board BOARD = new Board(8);
 
+    /**
+     * Конструктор партии по двум игрокам.
+     * @param player1 первый игрок
+     * @param player2 второй игрок
+     */
     ReversiRound(Gamer player1, Gamer player2) {
         PLAYER1 = player1;
         PLAYER2 = player2;
@@ -21,6 +41,9 @@ public final class ReversiRound implements Executable {
         currentPlayer = player1;
     }
 
+    /**
+     * Запускает партию.
+     */
     public void start() {
         System.out.println("\t\tПартия началась!");
         int passCount = 0;
@@ -52,6 +75,9 @@ public final class ReversiRound implements Executable {
         finish();
     }
 
+    /**
+     * Заканчивает партию.
+     */
     private void finish() {
         BOARD.show();
         showScore();
@@ -74,6 +100,9 @@ public final class ReversiRound implements Executable {
         System.out.println();
     }
 
+    /**
+     * Подготавливает игровую доску.
+     */
     private void prepareBoard() {
         BOARD.setObject(new Disk(Color.WHITE), BOARD.SIZE / 2 - 1, BOARD.SIZE / 2 - 1);
         BOARD.setObject(new Disk(Color.BLACK), BOARD.SIZE / 2 - 1, BOARD.SIZE / 2);
@@ -81,11 +110,18 @@ public final class ReversiRound implements Executable {
         BOARD.setObject(new Disk(Color.WHITE), BOARD.SIZE / 2, BOARD.SIZE / 2);
     }
 
+    /**
+     * Выводит очки игроков.
+     */
     private void showScore() {
         System.out.println("Чёрные:\t" + getDiskCount(Color.BLACK));
         System.out.println("Белые:\t" + getDiskCount(Color.WHITE));
     }
 
+    /**
+     * Выводит возможные ходы.
+     * @param moves список возможных ходов
+     */
     private void showMoves(ArrayList<String> moves) {
         System.out.print("Возможные ходы:");
         int count = 0;
@@ -99,18 +135,31 @@ public final class ReversiRound implements Executable {
         System.out.println();
     }
 
+    /**
+     * Добавляет возможные ходы на игровой доске.
+     * @param moves список возможных ходов
+     */
     private void addPossibleMoves(ArrayList<String> moves) {
         for (String move : moves) {
             BOARD.setObject(new PossibleMove(), Converter.convertToRow(move), Converter.convertToCol(move));
         }
     }
 
+    /**
+     * Удаляет возможные ходы на игровой доске.
+     * @param moves список возможных ходов
+     */
     private void removePossibleMoves(ArrayList<String> moves) {
         for (String move : moves) {
             BOARD.removeObject(Converter.convertToRow(move), Converter.convertToCol(move));
         }
     }
 
+    /**
+     * Возвращает количество фишек на игровой доске заданного цвета.
+     * @param color цвет
+     * @return количество фишек
+     */
     private int getDiskCount(Color color) {
         int count = 0;
         for (int i = 0; i < BOARD.SIZE; ++i) {
@@ -124,6 +173,9 @@ public final class ReversiRound implements Executable {
         return count;
     }
 
+    /**
+     * Меняет текущего игрока.
+     */
     private void changeCurrentPlayer() {
         if (currentPlayer == PLAYER1) {
             currentPlayer = PLAYER2;
@@ -132,6 +184,10 @@ public final class ReversiRound implements Executable {
         }
     }
 
+    /**
+     * Возвращает список возможных ходов.
+     * @return список возможных ходов
+     */
     private ArrayList<String> getPossibleMoves() {
         Color opponentColor = currentPlayer.COLOR == Color.WHITE ? Color.BLACK : Color.WHITE;
         ArrayList<String> moves = new ArrayList<>();
@@ -145,6 +201,10 @@ public final class ReversiRound implements Executable {
         return moves;
     }
 
+    /**
+     * Делает ход и обновляет данные на игровой доске.
+     * @param move ход
+     */
     private void makeMove(String move) {
         int row = Converter.convertToRow(move);
         int col = Converter.convertToCol(move);
@@ -157,6 +217,13 @@ public final class ReversiRound implements Executable {
         }
     }
 
+    /**
+     * Проверяет, есть ли замкнутые фишки противника между возможной фишкой и другой фишкой игрока.
+     * @param row индекс строки возможной фишки
+     * @param col индекс столбца возможной фишки
+     * @param opponentColor игровой цвет противника
+     * @return true, если есть, и false в противном случае
+     */
     private boolean checkOccupiedLine(int row, int col, Color opponentColor) {
         for (Direction direction : Direction.values()) {
             if (checkOccupiedLineDirection(row, col, direction, opponentColor)) {
@@ -166,6 +233,14 @@ public final class ReversiRound implements Executable {
         return false;
     }
 
+    /**
+     * Проверяет, есть ли замкнутые фишки противника между возможной фишкой и другой фишкой игрока по направлению.
+     * @param row индекс строки возможной фишки
+     * @param col индекс столбца возможной фишки
+     * @param direction направление
+     * @param opponentColor игровой цвет противника
+     * @return true, если есть, и false в противном случае
+     */
     private boolean checkOccupiedLineDirection(int row, int col, Direction direction, Color opponentColor) {
         boolean foundOpponentDisk = false;
         row = advanceRowDirection(row, direction);
@@ -180,6 +255,13 @@ public final class ReversiRound implements Executable {
         return false;
     }
 
+    /**
+     * Меняет цвет фишек противника между фишками игрока по направлению.
+     * @param row индекс строки одной фишки
+     * @param col индекс столбца одной фишки
+     * @param direction направление
+     * @param opponentColor игровой цвет противника
+     */
     private void changeOpponentDiskColorDirection(int row, int col, Direction direction, Color opponentColor) {
         row = advanceRowDirection(row, direction);
         col = advanceColDirection(col, direction);
@@ -195,6 +277,12 @@ public final class ReversiRound implements Executable {
         }
     }
 
+    /**
+     * Изменяет индекс строки согласно направлению.
+     * @param row индекс строки
+     * @param direction направление
+     * @return новый индекс строки
+     */
     private int advanceRowDirection(int row, Direction direction) {
         return switch (direction) {
             case UpLeft, Up, UpRight -> row - 1;
@@ -203,6 +291,12 @@ public final class ReversiRound implements Executable {
         };
     }
 
+    /**
+     * Изменяет индекс столбца согласно направлению.
+     * @param col индекс столбца
+     * @param direction направление
+     * @return новый индекс столбца
+     */
     private int advanceColDirection(int col, Direction direction) {
         return switch (direction) {
             case UpLeft, Left, DownLeft -> col - 1;
@@ -211,6 +305,13 @@ public final class ReversiRound implements Executable {
         };
     }
 
+    /**
+     * Проверяет наличие фишек заданного цвеета вокруг заданной поизции.
+     * @param row индекс строки
+     * @param col индекс столбца
+     * @param color цвет
+     * @return true, если есть хотя бы одна, и false в противном случае.
+     */
     private boolean hasNearDisk(int row, int col, Color color) {
         if (row - 1 >= 0 && col - 1 >= 0) {
             Object disk = BOARD.getObject(row - 1, col - 1);
