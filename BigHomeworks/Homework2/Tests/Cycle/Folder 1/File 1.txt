@@ -1,0 +1,2 @@
+Java is a great language!
+require ‘File 2’

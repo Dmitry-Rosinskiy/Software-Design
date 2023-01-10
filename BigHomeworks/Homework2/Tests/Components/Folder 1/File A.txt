@@ -1,0 +1,2 @@
+A
+require ‘Folder 2/Folder 3/File B’
