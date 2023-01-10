@@ -8,90 +8,6 @@ import java.util.Scanner;
  */
 public final class FileManager {
     /**
-     * Выводит файлы и папки в указанной директории.
-     * @param root директория
-     * @throws FileNotFoundException если указанной директории не существует
-     */
-    public void showFilesDirectories(String root) throws FileNotFoundException {
-        File fileInfo = getDirectoryInfo(root);
-        File[] content = fileInfo.listFiles();
-        for (File item : Objects.requireNonNull(content)) {
-            System.out.print(item.getName());
-            if (item.isDirectory()) {
-                System.out.println("\t(папка)");
-            } else {
-                System.out.println("\t(файл)");
-            }
-        }
-    }
-
-    /**
-     * Возвращает файлы в указанной директории.
-     * @param root директория
-     * @return массив путей к файлам
-     * @throws FileNotFoundException если указанной директории не существует
-     */
-    public String[] getFiles(String root) throws FileNotFoundException {
-        File fileInfo = getDirectoryInfo(root);
-        File[] content = fileInfo.listFiles();
-        ArrayList<String> files = new ArrayList<>();
-        for (File item : Objects.requireNonNull(content)) {
-            if (item.isFile()) {
-                files.add(item.getPath());
-            }
-        }
-        return files.toArray(new String[0]);
-    }
-
-    /**
-     * Возвращает файлы с указанным расширением в указанной директории.
-     * @param root директория
-     * @param extension расширение файлов
-     * @return массив путей к файлам
-     * @throws FileNotFoundException если указанной директории не существует
-     */
-    public String[] getFiles(String root, String extension) throws FileNotFoundException {
-        File fileInfo = getDirectoryInfo(root);
-        File[] content = fileInfo.listFiles();
-        ArrayList<String> files = new ArrayList<>();
-        for (File item : Objects.requireNonNull(content)) {
-            if (item.isFile() && extension.equals(getExtension(item))) {
-                files.add(item.getPath());
-            }
-        }
-        return files.toArray(new String[0]);
-    }
-
-    /**
-     * Возвращает все файлы в указанной директории с учётом их вложенности.
-     * @param root директория
-     * @return массив путей к файлам
-     * @throws FileNotFoundException если указанной директории не существует
-     * @throws IllegalArgumentException если указанная директория не является папкой
-     */
-    public String[] getAllFiles(String root) throws FileNotFoundException, IllegalArgumentException {
-        File fileInfo = getDirectoryInfo(root);
-        ArrayList<String> files = new ArrayList<>();
-        ArrayList<File> directories = new ArrayList<>();
-        directories.add(fileInfo);
-        while (!directories.isEmpty()) {
-            ArrayList<File> buffer = new ArrayList<>(directories);
-            directories.clear();
-            for (File directory : buffer) {
-                File[] content = directory.listFiles();
-                for (File item : Objects.requireNonNull(content)) {
-                    if (item.isFile()) {
-                        files.add(item.getPath());
-                    } else {
-                        directories.add(item);
-                    }
-                }
-            }
-        }
-        return files.toArray(new String[0]);
-    }
-
-    /**
      * Возвращает все файлы указанного расширения в указанной директории с учётом их вложенности.
      * @param root директория
      * @param extension расширение файлов
@@ -123,24 +39,6 @@ public final class FileManager {
     }
 
     /**
-     * Вовзвращает вспе папки в указанной директории.
-     * @param root директория
-     * @return массив путей к папкам
-     * @throws FileNotFoundException если указанной директории не существует
-     */
-    public String[] getDirectories(String root) throws FileNotFoundException {
-        File fileInfo = getDirectoryInfo(root);
-        File[] content = fileInfo.listFiles();
-        ArrayList<String> directories = new ArrayList<>();
-        for (File item : Objects.requireNonNull(content)) {
-            if (item.isDirectory()) {
-                directories.add(item.getPath());
-            }
-        }
-        return directories.toArray(new String[0]);
-    }
-
-    /**
      * Проверяет, существует ли файл.
      * @param file путь к файлу
      * @return {@code true}, если файл существует; {@code false} в противном случае
@@ -158,20 +56,6 @@ public final class FileManager {
     public boolean isDirectory(String path) {
         var fileInfo = new File(path);
         return fileInfo.isDirectory();
-    }
-
-    /**
-     * Выводит содержимое указанного файла.
-     * @param fileName путь к файлу
-     * @throws IOException если происходит ошибка при чтении файла
-     */
-    public void showFile(String fileName) throws IOException {
-        try (var reader = new FileReader(fileName)) {
-            var scan = new Scanner(reader);
-            while (scan.hasNextLine()) {
-                System.out.println(scan.nextLine());
-            }
-        }
     }
 
     /**

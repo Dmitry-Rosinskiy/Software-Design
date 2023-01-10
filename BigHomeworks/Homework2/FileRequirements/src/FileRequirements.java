@@ -40,11 +40,4 @@ public final class FileRequirements {
                                                 e.getDetails());
         }
     }
-
-    /**
-     * Выводит предаставление файловых зависимостей в виде графа смежности.
-     */
-    public void show() {
-        REQUIREMENTS_GRAPH.show();
-    }
 }

@@ -36,21 +36,6 @@ public final class Graph {
     }
 
     /**
-     * Выводит представление графа (матрица смежности).
-     */
-    public void show() {
-        if (ADJACENCY_MATRIX.length == 0) {
-            return;
-        }
-        for (int i = 0; i < ADJACENCY_MATRIX.length; ++i) {
-            for (int j = 0; j < ADJACENCY_MATRIX.length; ++j) {
-                System.out.print(ADJACENCY_MATRIX[i][j] + "\t");
-            }
-            System.out.println(VERTEX_NAMES[i]);
-        }
-    }
-
-    /**
      * Возвращает список вершин в обратном топологическом порядке.
      * @return массив названий вершин
      * @throws InvalidOperationException если нельзя получить обратный топологический порядок вершин

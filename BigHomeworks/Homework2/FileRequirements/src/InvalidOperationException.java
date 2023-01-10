@@ -8,12 +8,6 @@ public final class InvalidOperationException extends Exception {
     private String details = "";
 
     /**
-     * Конструктор исключения.
-     */
-    public InvalidOperationException() {
-    }
-
-    /**
      * Конструктор исключения с сообщением
      * @param message сообщение об исключении
      */
